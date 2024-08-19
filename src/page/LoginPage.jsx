@@ -89,12 +89,12 @@ const LoginPage = () => {
                 </button>
                 <p className="text-sm font-medium text-gray-900 dark:text-gray-900">
                   Don't have an account yet?{" "}
-                  <Link
+                  <a
                     to="/signup"
                     className="font-medium text-primary-600 hover:underline dark:text-primary-500"
                   >
                     Sign up
-                  </Link>
+                  </a>
                 </p>
               </form>
             </div>
