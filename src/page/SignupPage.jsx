@@ -1,60 +1,81 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import {
+  doCreateUserWithEmailAndPassword,
+  doSignInWithEmailAndPassword,
+  doSignInWithGoogle,
+} from "../firebase/auth";
+import { useAuth } from "../contexts/authContext";
+import Dashboard from "./Dashboard";
 
 const SignupPage = () => {
-  return (
-    <div className="">
-      <section className="bg-gray-50 dark:bg-gray-900">
-        <div className="flex w-full flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0 bg-gray-800 ">
-          <div
-            className="w-full radius-3xl rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0"
-            style={{
-              backgroundColor: "#c7d5e0",
-            }}
-          >
+  const { userLoggedIn } = useAuth;
+  const [email, setEmail] = React.useState("");
+  const [password, setPassword] = React.useState("");
+  const [confirmPassword, setconfirmPassword] = React.useState("");
+  const [isRegistering, setIsRegistering] = React.useState(false);
+  const [error, setError] = React.useState("");
+
+  const onSumbit = async (e) => {
+    e.preventDefault();
+    if (!isRegistering) {
+      setIsRegistering(true);
+      await doCreateUserWithEmailAndPassword(email, password);
+    }
+    return (
+      <div className="">
+        {userLoggedIn && <Dashboard to="/dashboard" replace={true} />}
+        <section className="bg-gray-50 dark:bg-gray-900">
+          <div className="flex w-full flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0 bg-gray-800 ">
             <div
-              className="p-6 space-y-4 md:space-y-6 sm:p-8 rounded-3xl "
+              className="w-full radius-3xl rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0"
               style={{
                 backgroundColor: "#c7d5e0",
               }}
             >
-              <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white ">
-                Register to your account !
-              </h1>
-              <form className="space-y-4 md:space-y-6" action="#">
-                <div>
-                  <label
-                    htmlFor="email"
-                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                  >
-                    Email
-                  </label>
-                  <input
-                    type="email"
-                    name="email"
-                    id="email"
-                    className="bg-gray-900 border border-gray-300 text-gray-200 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-200 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    placeholder="name@gmail.com"
-                    required
-                  />
-                </div>
-                <div>
-                  <label
-                    htmlFor="password"
-                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                  >
-                    Password
-                  </label>
-                  <input
-                    type="password"
-                    name="password"
-                    id="password"
-                    placeholder="••••••••"
-                    className="bg-gray-900 border border-gray-300 text-gray-200 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-200 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    required
-                  />
-                </div>
-                {/* <div className="flex items-center justify-between">
+              <div
+                className="p-6 space-y-4 md:space-y-6 sm:p-8 rounded-3xl "
+                style={{
+                  backgroundColor: "#c7d5e0",
+                }}
+              >
+                <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white ">
+                  Register to your account !
+                </h1>
+                <form className="space-y-4 md:space-y-6" action="#">
+                  <div>
+                    <label
+                      htmlFor="email"
+                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    >
+                      Email
+                    </label>
+                    <input
+                      type="email"
+                      name="email"
+                      id="email"
+                      className="bg-gray-900 border border-gray-300 text-gray-200 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-200 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                      placeholder="name@gmail.com"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label
+                      htmlFor="password"
+                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    >
+                      Password
+                    </label>
+                    <input
+                      type="password"
+                      name="password"
+                      id="password"
+                      placeholder="••••••••"
+                      className="bg-gray-900 border border-gray-300 text-gray-200 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-200 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                      required
+                    />
+                  </div>
+                  {/* <div className="flex items-center justify-between">
                   <div className="flex items-start">
                     <div className="flex items-center h-5">
                       <input
@@ -81,29 +102,29 @@ const SignupPage = () => {
                     Forgot password?
                   </a>
                 </div> */}
-                <button
-                  type="submit"
-                  className="w-full  duration-200 active:scale-90 size-12 text-white bg-gray-900  focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
-                >
-                  Signup
-                </button>
-                <p className="text-sm font-medium text-gray-900 dark:text-gray-900">
-                  Already have an account?{" "}
-                  <Link
-                  
-                    to="/login"
-                    className="font-medium text-primary-600 hover:underline dark:text-primary-500"
+                  <button
+                    type="submit"
+                    className="w-full  duration-200 active:scale-90 size-12 text-white bg-gray-900  focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
                   >
-                    Login
-                  </Link>
-                </p>
-              </form>
+                    Signup
+                  </button>
+                  <p className="text-sm font-medium text-gray-900 dark:text-gray-900">
+                    Already have an account?{" "}
+                    <Link
+                      to="/"
+                      className="font-medium text-primary-600 hover:underline dark:text-primary-500"
+                    >
+                      Login
+                    </Link>
+                  </p>
+                </form>
+              </div>
             </div>
           </div>
-        </div>
-      </section>
-    </div>
-  );
+        </section>
+      </div>
+    );
+  };
 };
 
 export default SignupPage;
